@@ -6,7 +6,8 @@ import {
   FETCH_QUIZ_SUCCESS,
   QUIZ_SET_STATE,
   FINISH_QUIZ,
-  QUIZ_NEXT_QUESTION
+  QUIZ_NEXT_QUESTION,
+  RETRY_QUIZ
 } from './actionTypes'
 
 export function fetchQuizes() {
@@ -93,6 +94,12 @@ export function quizNextQuestion(number) {
   }
 }
 
+export function retryQuiz() {
+  return {
+    type: RETRY_QUIZ
+  }
+}
+
 export function quizAnswerClick(answerId) {
   return (dispatch, getState) => {
     const state = getState().quiz
@@ -118,7 +125,7 @@ export function quizAnswerClick(answerId) {
 
 
       const timeout = window.setTimeout(() => {
-        if (this.isQuizFinished()) {
+        if (isQuizFinished(state)) {
           dispatch(finishQuiz())
 
         } else {
@@ -135,4 +142,8 @@ export function quizAnswerClick(answerId) {
 
     }
   }
+}
+
+function isQuizFinished(state) {
+  return state.activeQuestion + 1 === state.quiz.length
 }
